@@ -33,23 +33,36 @@ CreateThread(function()
     Wait(1000)
 
     local resourceName = GetCurrentResourceName()
-    local version = GetResourceMetadata(resourceName, 'version', 0)
+    local localVersion = GetResourceMetadata(resourceName, 'version', 0)
 
-    PerformHttpRequest('https://api.github.com/repos/Dapler-dev/dr-bridge/commits?per_page=1', function(statusCode, response, headers)
-        if statusCode == 200 then
-            local data = json.decode(response)
-            local latestSha = data[1] and data[1].sha
+    print('^3──────────────────────────────────────────────^7')
+    print('^3['..resourceName..']^7 Checking for updates...')
 
-            if latestSha then
-                print('^3['..resourceName..']^7 Current Version: ^2' .. version .. '^7')
-                print('^3['..resourceName..']^7 Latest Commit: ^6' .. latestSha:sub(1, 7) .. '^7')
-                print('^3['..resourceName..']^7 Check for updates at ^4https://github.com/Dapler-dev/dr-bridge^7')
+    PerformHttpRequest('https://raw.githubusercontent.com/Dapler-dev/dr-bridge/main/dr-bridge/fxmanifest.lua', function(statusCode, response, headers)
+        if statusCode == 200 and response then
+            local versions = {}
+            for match in response:gmatch("version%s*['\"](.-)['\"]") do
+                table.insert(versions, match)
+            end
+
+            local latestVersion = versions[2] or "unknown"
+
+            print('^3['..resourceName..']^7 Current Version: ^2' .. localVersion .. '^7')
+            print('^3['..resourceName..']^7 Latest Version: ^6' .. latestVersion .. '^7')
+
+            if latestVersion ~= "unknown" and localVersion ~= latestVersion then
+                print('^1['..resourceName..']^7 An update is available! Download the latest version at:')
+                print('^4https://github.com/Dapler-dev/dr-bridge^7')
             else
-                print('^1['..resourceName..'] Could not verify latest version.^7')
+                print('^2['..resourceName..']^7 You are running the latest version.^7')
             end
         else
-            print('^1['..resourceName..'] Failed to check for updates (GitHub API error).^7')
+            print('^1['..resourceName..']^7 Failed to check for updates (GitHub fetch error).^7')
         end
+
+        print('^3──────────────────────────────────────────────^7')
     end, 'GET', '', { ['User-Agent'] = 'dr-bridge' })
 end)
+
+
 
