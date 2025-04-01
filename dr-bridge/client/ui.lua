@@ -3,13 +3,11 @@ Bridge = Bridge or {}
 local usingOxTextUI = false
 
 CreateThread(function()
-    if Config.UseOxTextUI and GetResourceState("ox_lib") == "started" then
+    if config.UseOxTextUI and GetResourceState("ox_lib") == "started" then
         usingOxTextUI = true
-        if Config.Debug then
-            print("[Bridge:UI] ox_lib zjištěn a použit pro TextUI.")
-        end
-    elseif Config.Debug then
-        print("[Bridge:UI] ox_lib není aktivní nebo není povolen v Configu.")
+        Bridge.DebugPrint("UI", "ox_lib detected and used for TextUI.")
+    else
+        Bridge.DebugPrint("UI", "ox_lib is not active or not enabled in the config.")
     end
 end)
 

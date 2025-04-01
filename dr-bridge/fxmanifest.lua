@@ -2,8 +2,8 @@ fx_version 'cerulean'
 game 'gta5'
 
 author 'Daple[R]'
-description 'Universal Framework Bridge for QBCore, ESX, and ox_lib'
-version '1.0.0'
+description 'Universal Framework Bridge for QBCore, ESX'
+version '1.1.0'
 
 shared_scripts {
     'config.lua',

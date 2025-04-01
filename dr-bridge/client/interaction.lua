@@ -5,16 +5,12 @@ local targetSystem = nil
 CreateThread(function()
     if GetResourceState("qb-target") == "started" then
         targetSystem = "qb"
-        if Config.Debug then
-            print("[Bridge:Target] Detekován qb-target")
-        end
+        Bridge.DebugPrint("Target", "Detected qb-target")
     elseif GetResourceState("ox_target") == "started" then
         targetSystem = "ox"
-        if Config.Debug then
-            print("[Bridge:Target] Detekován ox_target")
-        end
-    elseif Config.Debug then
-        print("[Bridge:Target] Nebyl detekován žádný podporovaný target systém")
+        Bridge.DebugPrint("Target", "Detected ox_target")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "No supported target system detected")
     end
 end)
 
@@ -26,8 +22,8 @@ function Bridge.AddTargetEntity(entity, options, distance)
         })
     elseif targetSystem == "ox" then
         exports['ox_target']:addLocalEntity(entity, options)
-    elseif Config.Debug then
-        print("[Bridge:Target] AddTargetEntity: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "AddTargetEntity: no target active")
     end
 end
 
@@ -39,8 +35,8 @@ function Bridge.AddTargetModel(models, options, distance)
         })
     elseif targetSystem == "ox" then
         exports['ox_target']:addModel(models, options)
-    elseif Config.Debug then
-        print("[Bridge:Target] AddTargetModel: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "AddTargetModel: no target active")
     end
 end
 
@@ -49,7 +45,7 @@ function Bridge.AddTargetZone(name, coords, size, options, distance)
         exports['qb-target']:AddBoxZone(name, coords, size.x, size.y, {
             name = name,
             heading = 0,
-            debugPoly = Config.Debug,
+            debugPoly = config.Debug,
             minZ = coords.z - 1.0,
             maxZ = coords.z + 1.0
         }, {
@@ -62,11 +58,11 @@ function Bridge.AddTargetZone(name, coords, size, options, distance)
             coords = coords,
             size = size,
             rotation = 0,
-            debug = Config.Debug,
+            debug = config.Debug,
             options = options
         })
-    elseif Config.Debug then
-        print("[Bridge:Target] AddTargetZone: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "AddTargetZone: no target active")
     end
 end
 
@@ -75,8 +71,8 @@ function Bridge.RemoveTargetEntity(entity)
         exports['qb-target']:RemoveTargetEntity(entity)
     elseif targetSystem == "ox" then
         exports['ox_target']:removeLocalEntity(entity)
-    elseif Config.Debug then
-        print("[Bridge:Target] RemoveTargetEntity: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "RemoveTargetEntity: no target active")
     end
 end
 
@@ -85,8 +81,8 @@ function Bridge.RemoveTargetModel(models)
         exports['qb-target']:RemoveTargetModel(models)
     elseif targetSystem == "ox" then
         exports['ox_target']:removeModel(models)
-    elseif Config.Debug then
-        print("[Bridge:Target] RemoveTargetModel: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "RemoveTargetModel: no target active")
     end
 end
 
@@ -95,8 +91,8 @@ function Bridge.RemoveTargetZone(name)
         exports['qb-target']:RemoveZone(name)
     elseif targetSystem == "ox" then
         exports['ox_target']:removeZone(name)
-    elseif Config.Debug then
-        print("[Bridge:Target] RemoveTargetZone: žádný target aktivní")
+    elseif config.Debug then
+        Bridge.DebugPrint("Target", "RemoveTargetZone: no target active")
     end
 end
 
@@ -105,8 +101,8 @@ end
 ---@param newOptions table
 function Bridge.UpdateTargetOptions(type, id, newOptions)
     if targetSystem ~= "ox" then
-        if Config.Debug then
-            print("[Bridge:Target] UpdateTargetOptions: dostupné pouze v ox_target")
+        if config.Debug then
+            Bridge.DebugPrint("Target", "UpdateTargetOptions: only available in ox_target")
         end
         return
     end

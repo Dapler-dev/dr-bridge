@@ -2,8 +2,8 @@ Bridge = Bridge or {}
 Bridge.Framework = nil
 
 local function detectFramework()
-    if Config.Framework then
-        return Config.Framework
+    if config.Framework then
+        return config.Framework
     end
 
     if GetResourceState("qb-core") == "started" then
@@ -18,9 +18,8 @@ end
 CreateThread(function()
     Bridge.Framework = detectFramework()
 
-    if Config.Debug then
-        print("[Bridge:Client] Detekovaný framework: " .. (Bridge.Framework or "neznámý"))
-    end
+    Bridge.DebugPrint("Client", "Detected framework: " .. Bridge.Framework or "unknown")
+
 
     if Bridge.Framework == "esx" then
         while not ESX do
@@ -34,7 +33,7 @@ CreateThread(function()
         end
     end
 
-    if Config.Debug then
-        print("[Bridge:Client] Framework inicializován.")
+    if config.Debug then
+        Bridge.DebugPrint("Client", "Framework initialized.")
     end
 end)

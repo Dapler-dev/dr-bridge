@@ -51,9 +51,7 @@ function Bridge.SendDiscordLog(webhook, title, message, color)
     })
 
     PerformHttpRequest(webhook, function(err, text, headers)
-        if Config.Debug then
-            print("[Bridge:DiscordLog] Status: " .. tostring(err))
-        end
+        Bridge.DebugPrint("DiscordLog", "Status: " .. tostring(err))
     end, 'POST', payload, {
         ['Content-Type'] = 'application/json'
     })
@@ -70,10 +68,4 @@ function Bridge.SendChatMessage(source, message, prefix)
     TriggerClientEvent('chat:addMessage', source, {
         args = { prefix or "^3[Bridge]", message }
     })
-end
-
----@param title string
----@param message string
-function Bridge.LogToConsole(title, message)
-    print(("^2[Bridge:%s]^7 %s"):format(title, message))
 end

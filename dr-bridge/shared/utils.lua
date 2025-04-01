@@ -1,9 +1,9 @@
 Bridge = Bridge or {}
 
 ---@param message string
-function Bridge.DebugPrint(message)
-    if Config.Debug then
-        print(("[Bridge:Debug] %s"):format(message))
+function Bridge.DebugPrint(title, message)
+    if config.Debug then
+        print(("^2[Bridge:%s]^7 %s"):format(title, message))
     end
 end
 
