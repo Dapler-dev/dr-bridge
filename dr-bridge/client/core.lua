@@ -79,3 +79,17 @@ end
 function Bridge.GetPed()
     return PlayerPedId()
 end
+
+function Bridge.TriggerCallback(name, cb, ...)
+    CreateThread(function()
+        while not Bridge.Framework do Wait(50) end
+
+        if Bridge.Framework == 'qb' then
+            QBCore.Functions.TriggerCallback(name, cb, ...)
+        elseif Bridge.Framework == 'esx' then
+            ESX.TriggerServerCallback(name, cb, ...)
+        else
+            print(('^1[dr-bridge] Unknown framework, cannot trigger callback "%s"^0'):format(name))
+        end
+    end)
+end

@@ -26,6 +26,16 @@ CreateThread(function()
         QBCore = exports['qb-core']:GetCoreObject()
     end
 
+    for _, cb in pairs(Bridge._pendingCallbacks) do
+        Bridge.RegisterCallback(cb.name, cb.handler)
+    end
+    Bridge._pendingCallbacks = nil
+
+    for _, cmd in pairs(Bridge._pendingCommands or {}) do
+        Bridge.RegisterCommand(cmd.name, cmd.help, cmd.args, cmd.cb, cmd.permission)
+    end
+    Bridge._pendingCommands = nil
+
     Bridge.DebugPrint("Server", "Framework initialized.")
 end)
 

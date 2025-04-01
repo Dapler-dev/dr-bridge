@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Daple[R]'
 description 'Universal Framework Bridge for QBCore, ESX'
-version '1.1.2'
+version '1.2.0'
 
 shared_scripts {
     'config.lua',
@@ -37,6 +37,7 @@ exports {
     'GetCoords',
     'IsInVehicle',
     'GetPed',
+    'TriggerCallback',
 
     -- extras
     'Show3DText',
@@ -79,6 +80,9 @@ server_exports {
     'AddItem',
     'RemoveItem',
     'HasItem',
+    'RegisterCallback',
+    'RegisterCommand',
+    'RegisterUsableItem',
 
     -- extras
     'GetIdentifiers',

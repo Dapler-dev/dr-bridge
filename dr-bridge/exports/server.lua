@@ -37,6 +37,12 @@ exports("HasItem", function(source, item, count)
     return Bridge.HasItem(source, item, count)
 end)
 
+exports('RegisterCallback', Bridge.RegisterCallback)
+
+exports('RegisterCommand', Bridge.RegisterCommand)
+
+exports('RegisterUsableItem', Bridge.RegisterUsableItem)
+
 -- extras
 exports("GetIdentifiers", function(source)
     return Bridge.GetIdentifiers(source)

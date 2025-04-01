@@ -35,6 +35,8 @@ exports("GetPed", function()
     return Bridge.GetPed()
 end)
 
+exports('TriggerCallback', Bridge.TriggerCallback)
+
 -- extras
 exports("Show3DText", function(coords, text, scale)
     Bridge.Show3DText(coords, text, scale)
