@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Daple[R]'
 description 'Universal Framework Bridge for QBCore, ESX'
-version '1.1.0'
+version '1.1.1'
 
 shared_scripts {
     'config.lua',

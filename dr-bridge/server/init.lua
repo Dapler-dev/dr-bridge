@@ -32,8 +32,8 @@ end)
 CreateThread(function()
     Wait(1000)
 
-    local version = 1.1.0
     local resourceName = GetCurrentResourceName()
+    local version = GetResourceMetadata(resourceName, 'version', 0)
 
     PerformHttpRequest('https://api.github.com/repos/Dapler-dev/dr-bridge/commits?per_page=1', function(statusCode, response, headers)
         if statusCode == 200 then
