@@ -18,9 +18,30 @@ function Bridge.GetPlayer(source)
 
         playerData = {
             identifier = player.PlayerData.steam or player.PlayerData.citizenid,
+            source = source,
+            name = {
+                firstname = player.PlayerData.firstname,
+                lastname = player.PlayerData.lastname,
+            },
             job = {
                 name = player.PlayerData.job.name,
-                grade = player.PlayerData.job.grade,
+                label = player.PlayerData.job.label,
+                payment = player.PlayerData.job.payment,
+                onduty = player.PlayerData.job.onduty,
+                isboss = player.PlayerData.job.isboss,
+                grade = {
+                    name = player.PlayerData.job.grade.name,
+                    level = player.PlayerData.job.grade.level
+                },
+            },
+            gang = {
+                name = player.PlayerData.gang.name,
+                label = player.PlayerData.gang.label,
+                isboss = player.PlayerData.gang.isboss,
+                grade = {
+                    name = player.PlayerData.gang.grade.name,
+                    level = player.PlayerData.gang.grade.level
+                },
             },
             money = {
                 cash = player.PlayerData.money.cash,
@@ -36,18 +57,32 @@ function Bridge.GetPlayer(source)
         if not player then return nil end
 
         playerData = {
-            identifier = player.getIdentifier(),
-            job = {
-                name = player.getJob().name,
-                grade = player.getJob().grade,
+            identifier = player.identifier,
+            source = source,
+            name = {
+                firstname = player.get('firstName'),
+                lastname = player.get('lastName'),
             },
+            job = {
+                name = player.job.name,
+                label = player.job.label,
+                payment = player.job.grade_salary,
+                onduty = true,
+                isboss = player.job.grade_name == 'boss',
+                grade = {
+                    name = player.job.grade_name,
+                    level = player.job.grade
+                },
+            },
+            gang = nil,
             money = {
                 cash = player.getMoney(),
-                bank = player.getAccount('bank') and player.getAccount('bank').money or 0,
+                bank = player.getAccount('bank').money,
             },
             metadata = {},
             items = player.getInventory(),
         }
+        
     end
 
     return playerData
@@ -172,6 +207,26 @@ function Bridge.HasItem(source, item, count)
     return false
 end
 
+function Bridge.SetMetadata(source, key, value)
+    if Bridge.Framework == "qb" then
+        player = QBCore.Functions.GetPlayer(source)
+        player.Functions.SetMetaData(key, value)
+    elseif Bridge.Framework == "esx" then
+        local player = ESX.GetPlayerFromId(source)
+        player.setMeta(key, value)
+    end
+end
+
+function Bridge.GetMetadata(source, key)
+    if Bridge.Framework == "qb" then
+        local player = QBCore.Functions.GetPlayer(source)
+        return player.PlayerData.metadata[key]
+    elseif Bridge.Framework == "esx" then
+        local player = ESX.GetPlayerFromId(source)
+        return player.getMeta(key)
+    end
+end
+
 function Bridge.RegisterCallback(name, handler)
     if not Bridge.Framework then
         table.insert(Bridge._pendingCallbacks, { name = name, handler = handler })
@@ -198,9 +253,17 @@ function Bridge.RegisterCommand(name, help, args, cb, permission)
     end
 
     if Bridge.Framework == 'qb' then
-        QBCore.Commands.Add(name, help or '', args or {}, true, function(source, rawArgs)
-            cb(source, rawArgs)
-        end, permission)
+        if type(name) == "string" then
+            QBCore.Commands.Add(name, help or '', args or {}, true, function(source, rawArgs)
+                cb(source, rawArgs)
+            end, permission)
+        elseif type(name) == "table" then
+            for _, comName in ipairs(name) do
+                QBCore.Commands.Add(comName, help or '', args or {}, true, function(source, rawArgs)
+                    cb(source, rawArgs)
+                end, permission)
+            end
+        end
     elseif Bridge.Framework == 'esx' then
         ESX.RegisterCommand(name, permission or 'user', function(xPlayer, rawArgs, showError)
             local source = xPlayer.source
@@ -225,4 +288,11 @@ function Bridge.RegisterUsableItem(itemName, callback)
     else
         print(('^1[dr-bridge] Unknown framework, cannot register usable item "%s"^0'):format(itemName))
     end
+end
+
+if Bridge.Framework == 'esx' then
+    RegisterNetEvent('esx:playerLoaded', function(playerId, xPlayer)
+        local Player = Bridge.GetPlayer(playerId)
+        TriggerEvent('dr-bridge:playerLoaded', playerId, Player)
+    end)
 end

@@ -3,100 +3,30 @@ game 'gta5'
 
 author 'Daple[R]'
 description 'Universal Framework Bridge for QBCore, ESX'
-version '1.2.0'
+version '1.2.1'
 
 shared_scripts {
     'config.lua',
     'shared/utils.lua',
+    'modules/**/shared.lua',
 }
 
 client_scripts {
-    'client/init.lua',
-    'client/core.lua',
-    'client/ui.lua',
-    'client/interaction.lua',
-    'client/extras.lua',
-    'exports/client.lua',
+    'client/*.lua',
+    'exports/*.lua',
+    'modules/**/client.lua',
 }
 
 server_scripts {
-    'server/init.lua',
-    'server/core.lua',
-    'server/extras.lua',
-    'exports/server.lua',
+    'server/*.lua',
+    'exports/*.lua',
+    'modules/**/server.lua',
 }
 
 exports {
-    -- core
-    'GetPlayerData',
-    'GetJob',
-    'GetMoney',
-    'HasItem',
-    'Notify',
-    'IsDead',
-    'GetCoords',
-    'IsInVehicle',
-    'GetPed',
-    'TriggerCallback',
-
-    -- extras
-    'Show3DText',
-    'AddBlip',
-    'DrawMarker',
-    'PlayAnim',
-    'ShowHelpNotification',
-    'ShowNotification',
-
-    -- interaction
-    'AddTargetEntity',
-    'AddTargetModel',
-    'AddTargetZone',
-    'RemoveTargetEntity',
-    'RemoveTargetModel',
-    'RemoveTargetZone',
-    'UpdateTargetOptions',
-
-    -- ui
-    'ShowTextUI',
-    'HideTextUI',
-
-    -- shared utils
-    'DebugPrint',
-    'TableHasValue',
-    'DeepCopy',
-    'Round',
-    'IsTable',
-    'WaitForCondition',
+    'GetBridge',
 }
 
 server_exports {
-    -- core
-    'GetPlayer',
-    'GetJob',
-    'SetJob',
-    'GetMoney',
-    'AddMoney',
-    'RemoveMoney',
-    'AddItem',
-    'RemoveItem',
-    'HasItem',
-    'RegisterCallback',
-    'RegisterCommand',
-    'RegisterUsableItem',
-
-    -- extras
-    'GetIdentifiers',
-    'GetPlayerName',
-    'SendDiscordLog',
-    'GetOnlineCount',
-    'SendChatMessage',
-    'LogToConsole',
-
-    -- shared utils
-    'DebugPrint',
-    'TableHasValue',
-    'DeepCopy',
-    'Round',
-    'IsTable',
-    'WaitForCondition',
+    'GetBridge'
 }

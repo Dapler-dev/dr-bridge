@@ -30,15 +30,27 @@ end
 function Bridge.AddTargetModel(models, options, distance)
     if targetSystem == "qb" then
         exports['qb-target']:AddTargetModel(models, {
-            options = options,
+            options = { options },
             distance = distance or 2.5
         })
     elseif targetSystem == "ox" then
-        exports['ox_target']:addModel(models, options)
+        exports['ox_target']:addModel(models, {
+            {
+                label = options.label,
+                icon = options.icon,
+                distance = distance or 2.5,
+                onSelect = function(data)
+                    if options.action then
+                        options.action(data.entity)
+                    end
+                end
+            }
+        })
     elseif config.Debug then
         Bridge.DebugPrint("Target", "AddTargetModel: no target active")
     end
 end
+
 
 function Bridge.AddTargetZone(name, coords, size, options, distance)
     if targetSystem == "qb" then
